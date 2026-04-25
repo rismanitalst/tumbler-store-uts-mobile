@@ -156,6 +156,27 @@ flutter run
 
 ---
 
+## Struktur Folder Flutter
+lib/
+├── core/
+│   └── routes/         # App router
+├── features/
+│   ├── auth/
+│   │   └── presentation/
+│   │       ├── pages/  # Login, Register, Verify Email
+│   │       └── providers/
+│   └── dashboard/
+│       ├── data/
+│       │   └── models/ # ProductModel
+│       ├── domain/
+│       │   └── repositories/
+│       └── presentation/
+│           ├── pages/  # DashboardPage, ProductDetailPage
+│           └── providers/
+└── main.dart
+
+---
+
 ## Batasan Masalah
 
 Beberapa fitur masih dalam tahap pengembangan dan belum tersedia pada versi ini:
