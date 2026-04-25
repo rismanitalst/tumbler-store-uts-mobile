@@ -157,23 +157,26 @@ flutter run
 ---
 
 ## Struktur Folder Flutter
+
+```text
 lib/
 ├── core/
-│   └── routes/         # App router
+│   └── routes/              # App router
 ├── features/
 │   ├── auth/
 │   │   └── presentation/
-│   │       ├── pages/  # Login, Register, Verify Email
+│   │       ├── pages/       # Login, Register, Verify Email
 │   │       └── providers/
 │   └── dashboard/
 │       ├── data/
-│       │   └── models/ # ProductModel
+│       │   └── models/      # ProductModel
 │       ├── domain/
 │       │   └── repositories/
 │       └── presentation/
-│           ├── pages/  # DashboardPage, ProductDetailPage
+│           ├── pages/       # DashboardPage, ProductDetailPage
 │           └── providers/
 └── main.dart
+```
 
 ---
 
