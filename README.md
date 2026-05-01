@@ -7,6 +7,8 @@ Rismanita Lestari | 1123150058 | TI 23 M SE
 
 Aplikasi mobile berbasis Flutter untuk mengelola dan menampilkan produk tumbler. Aplikasi ini terhubung dengan backend Golang melalui REST API untuk proses autentikasi dan pengolahan data.
 
+Link Demo App YT : https://youtu.be/Yy3t6UN8duM?si=COHrVWlXoM2Z2AO5
+
 ---
 
 ## Struktur & Repository
@@ -34,6 +36,12 @@ Aplikasi ini dipisah jadi dua bagian:
 * Refresh data (pull to refresh)
 * Handling loading dan error state
 * Detail produk (nama, harga, stok, kategori, deskripsi)
+* Menambahkan produk ke keranjang
+* Mengelola keranjang (tambah, kurang, hapus item)
+* Select item untuk checkout
+* Perhitungan total harga secara real-time
+* Halaman checkout dengan ringkasan pesanan
+* Simulasi proses pembayaran (checkout sukses)
 * Logout
 
 ---
@@ -95,66 +103,29 @@ flutter run
 ```
 ---
 
-## Alur Autentikasi
+## API Flow
 
-### Register
-
-1. User isi nama, email, dan password
-2. Sistem validasi input
-3. Data dikirim ke backend / Firebase
-4. Jika berhasil, user diarahkan ke halaman verifikasi email
-5. Jika gagal, muncul pesan error (contoh "email sudah terdaftar" - cek firebase auth dan delete acc, kemudian daftar kembali dengan email yang sama)
-
-### Verifikasi Email
-
-1. User diminta cek email setelah register
-2. Sistem cek status verifikasi secara otomatis
-3. Jika sudah diverifikasi, user langsung masuk ke dashboard
-4. Bisa kirim ulang email verifikasi
-5. User bisa logout jika ingin ganti akun
-
-### Login
-
-1. Login dengan email/password atau Google
-2. Jika berhasil → masuk dashboard
-3. Jika email belum diverifikasi → ke halaman verifikasi
-4. Jika gagal → muncul error
+1. User login menggunakan Firebase Authentication
+2. Firebase mengembalikan ID Token
+3. Token dikirim ke backend
+4. Backend memverifikasi token dan mengembalikan JWT
+5. JWT disimpan di local storage
+6. JWT digunakan untuk request API berikutnya (get product, dll)
 
 ---
 
-## Alur Dashboard
+## Demo Flow Aplikasi
 
-1. Setelah login, user masuk ke dashboard
-2. Aplikasi otomatis fetch data produk
-3. Saat loading, muncul indikator loading
-4. Jika error, muncul pesan + retry
-5. Jika berhasil, data tampil dalam bentuk grid 2 kolom
-6. User bisa filter produk berdasarkan kategori
-7. User bisa cari produk secara real-time via search bar
-8. Pull to refresh untuk memuat ulang data produk
-
----
-
-## Alur Detail Produk
-
-1. User tap salah satu produk di dashboard
-2. Aplikasi navigasi ke halaman detail produk
-3. Halaman menampilkan foto produk, nama, harga, kategori, stok, dan deskripsi
-4. Jika stok tersedia, tombol aktif
-5. Jika stok habis, tombol otomatis nonaktif dan berubah jadi "Stok Habis"
-6. User bisa kembali ke dashboard via tombol back
-
----
-
-## Alur Logout
-
-1. User klik icon logout di pojok kanan atas dashboard
-2. Sistem hapus session di device (token dihapus dari secure storage)
-3. Firebase session di-clear
-4. Aplikasi redirect kembali ke halaman login
-5. Data user tetap aman tersimpan di Firebase dan MySQL
-
----
+1. Register akun
+2. Verifikasi email
+3. Login
+4. Masuk ke dashboard (catalog produk)
+5. Tambah produk ke keranjang
+6. Kelola keranjang (tambah/kurang/hapus)
+7. Pilih item untuk checkout
+8. Masuk ke halaman checkout
+9. Klik tombol bayar (simulasi sukses)
+10. Kembali ke dashboard
 
 ## Struktur Folder Flutter
 
@@ -180,10 +151,26 @@ lib/
 
 ---
 
+## State Management
+
+Aplikasi menggunakan Provider sebagai state management dengan konsep ChangeNotifier.
+
+Beberapa state yang dikelola:
+* AuthProvider → mengelola autentikasi user
+* ProductProvider → mengelola data produk
+* CartProvider → mengelola keranjang, termasuk:
+  - tambah/hapus item
+  - selected item
+  - total harga
+  - checkout flow
+
+Setiap perubahan state akan memanggil notifyListeners() untuk update UI secara real-time.
+
+---
+
 ## Batasan Masalah
 
-Beberapa fitur masih dalam tahap pengembangan dan belum tersedia pada versi ini:
+Beberapa keterbatasan pada versi aplikasi saat ini:
 
-* **Tombol "Tambah ke Keranjang"** — tombol sudah tampil di halaman detail produk namun belum memiliki fungsi
-* **Halaman Keranjang** — belum tersedia, user belum bisa melihat daftar produk yang dipilih
-* **Halaman Transaksi / Checkout** — belum tersedia, proses pembelian belum dapat dilakukan
+* Belum terintegrasi dengan payment gateway (hanya simulasi checkout)
+
